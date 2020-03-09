@@ -14,7 +14,7 @@ use ndarray::{arr1, Array1, Array3};
 //R[1, 0, 0] = -1.0
 //R[num_states - 2, 1, num_states - 1] = 1.0
 
-pub fn init() -> (Array1<usize>, Array1<i32>, Array1<usize>, Array3<f32>, Array3<f32>){
+pub fn init() -> (Array1<usize>, Array1<usize>, Array1<usize>, Array3<f32>, Array3<f32>){
     let mut num_states = vec![0; 5];
     for i in 0.. num_states.len() {
         num_states[i] = i;
