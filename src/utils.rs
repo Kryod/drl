@@ -1,5 +1,20 @@
 use ndarray::{ Array1, Array2 };
 
+#[macro_export]
+macro_rules! inc_vec {
+    ( $( $n:expr )? ) => {
+        {
+            $(
+                let mut v = Vec::with_capacity($n as usize);
+                for i in 0..$n {
+                    v.push(i);
+                }
+                v
+            )*
+        }
+    };
+}
+
 pub fn apply_for_indices<T, F>(A: &mut Array1<T>, indices: &Array1<usize>, f: F)
 where F: Fn(usize, &mut T) {
     for idx in indices.iter() {
