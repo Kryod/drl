@@ -1,0 +1,7 @@
+[package]
+name = "drl"
+version = "0.1.0"
+authors = ["Axel COCAT", "Yohann JERRAIN"]
+edition = "2018"
+
+[dependencies]
