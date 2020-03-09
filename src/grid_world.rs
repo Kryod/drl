@@ -35,7 +35,7 @@ P[num_states - 1, :, :] = 0.0
 R[:, :, width - 1] = -5.0
 R[:, :, num_states - 1] = 1.0 */
 
-pub fn init(width: usize, height: usize) -> (Array1<usize>, Array1<i32>, Array1<usize>, Array3<f32>, Array3<f32>){
+pub fn init(width: usize, height: usize) -> (Array1<usize>, Array1<usize>, Array1<usize>, Array3<f32>, Array3<f32>){
 
     let num_states = width*height;
     let S = arr1(&inc_vec![num_states]);
