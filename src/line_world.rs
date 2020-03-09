@@ -1,4 +1,5 @@
 use ndarray::{arr1, Array1, Array3};
+use crate::inc_vec;
 
 //num_states = 100
 //S = np.arange(num_states)
@@ -14,14 +15,10 @@ use ndarray::{arr1, Array1, Array3};
 //R[1, 0, 0] = -1.0
 //R[num_states - 2, 1, num_states - 1] = 1.0
 
-pub fn init() -> (Array1<usize>, Array1<usize>, Array1<usize>, Array3<f32>, Array3<f32>){
-    let mut num_states = vec![0; 5];
-    for i in 0.. num_states.len() {
-        num_states[i] = i;
-    }
-    let S = arr1(&num_states);
+pub fn init(num_states: usize) -> (Array1<usize>, Array1<usize>, Array1<usize>, Array3<f32>, Array3<f32>) {
+    let S = arr1(&inc_vec![num_states]);
     let A = arr1(&[0,1]);
-    let T = arr1(&[0,num_states.len()-1]);
+    let T = arr1(&[0,num_states - 1]);
     let mut P = Array3::<f32>::zeros((S.shape()[0], A.shape()[0], S.shape()[0]));
     let mut R = Array3::<f32>::zeros((S.shape()[0], A.shape()[0], S.shape()[0]));
 
@@ -36,7 +33,7 @@ pub fn init() -> (Array1<usize>, Array1<usize>, Array1<usize>, Array3<f32>, Arra
         P[(*s, 1, *s+1)] = 1.0;
     }
     R[(1, 0, 0)] = -1.0;
-    R[(num_states.len()-2, 1, num_states.len()-1)] = 1.0;
+    R[(num_states - 2, 1, num_states - 1)] = 1.0;
 
     (S, A, T, P, R)
 }
