@@ -1,4 +1,4 @@
-use ndarray::{ Array1, Array2 };
+use ndarray::{ Array1, Array2, Array3 };
 
 #[macro_export]
 macro_rules! inc_vec {
@@ -29,6 +29,18 @@ where F: Fn((usize, usize), &mut T) {
         for b in indices.1.iter() {
             let idx = (*a, *b);
             f(idx, &mut A[idx]);
+        }
+    }
+}
+
+pub fn apply_for_indices_3<T, F>(A: &mut Array3<T>, indices: (&Array1<usize>, &Array1<usize>, &Array1<usize>), f: F)
+where F: Fn((usize, usize, usize), &mut T) {
+    for a in indices.0.iter() {
+        for b in indices.1.iter() {
+            for c in indices.2.iter() {
+                let idx = (*a, *b, *c);
+                f(idx, &mut A[idx]);
+            }
         }
     }
 }
