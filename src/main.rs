@@ -8,7 +8,7 @@ pub mod grid_world;
 pub mod algorithms;
 
 fn main() {
-    let mut stopwatch = stopwatch::Stopwatch::new();
+    /*let mut stopwatch = stopwatch::Stopwatch::new();
 
     let lw = line_world::init(100);
     let Pi = policies::create_random_uniform_policy(lw.S.len(), lw.A.len());
@@ -39,4 +39,11 @@ fn main() {
     println!("Grid world random uniform:");
     dbg!(&V);
     println!("Temps d'exécution: {} secondes", stopwatch.elapsed().unwrap().as_secs_f32());
+
+    println!();*/
+
+    let lw = line_world::init(50);
+    let (Q, Pi) = algorithms::monte_carlo_control_with_exploring_starts(lw, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, None, Some(5000));
+    println!("Action value optimale:\r\n{}", Q);
+    println!("Policy optimale:\r\n {}", Pi);
 }

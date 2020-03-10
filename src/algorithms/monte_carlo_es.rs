@@ -46,9 +46,6 @@ use crate::line_world::LineWorld;
     return Q, Pi*/
 
 pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
-        S: Array1<usize>,
-        A: Array1<usize>,
-        T: Array1<usize>,
         lw: LineWorld,
         step_func: F,
         step_until_the_end_and_return_transitions_func: Fi,
@@ -65,6 +62,10 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
             &Array3<f32> ) -> (Vec<usize>, Vec<usize>, Vec<f32>, Vec<usize>)
      
     {
+    let S = &lw.S;
+    let A = &lw.A;
+    let T = &lw.T;
+
     let gamma = gamma.unwrap_or(0.99_f32);
     let nb_iter = nb_iter.unwrap_or(1_000_i32);
 

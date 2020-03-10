@@ -1,8 +1,7 @@
-use ndarray::{arr1, Array1, Array2, Array3};
+use ndarray::{ s, arr1, Array1, Array2, Array3 };
+use rand::{ prelude::*, distributions::WeightedIndex };
+
 use crate::inc_vec;
-use rand::prelude::*;
-use rand::distributions::WeightedIndex;
-use ndarray::s;
 
 //num_states = 100
 //S = np.arange(num_states)
