@@ -2,13 +2,13 @@ use ndarray::{ Array, Array1, Array2, Array3 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 
 pub fn iterative_policy_evaluation(
-    S: Array1<usize>,
-    A: Array1<usize>,
-    T: Array1<usize>,
-    P: Array3<f32>,
-    R: Array3<f32>,
-    Pi: Array2<f32>,
-    V: Option<Array1<f32>>,
+    S: &Array1<usize>,
+    A: &Array1<usize>,
+    T: &Array1<usize>,
+    P: &Array3<f32>,
+    R: &Array3<f32>,
+    Pi: &Array2<f32>,
+    V: Option<&Array1<f32>>,
     gamma: Option<f32>,
     theta: Option<f32>,
 ) -> Array1<f32> {
@@ -18,7 +18,7 @@ pub fn iterative_policy_evaluation(
     assert!(gamma >= 0.0_f32 && gamma < 1.0_f32);
     assert!(theta > 0.0_f32);
 
-    let mut V = V.unwrap_or(Array::random(S.shape(), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality().unwrap());
+    let mut V = V.map(|v| v.clone()).unwrap_or_else(|| Array::random(S.shape(), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality().unwrap());
     crate::utils::apply_for_indices(&mut V, &T, |_idx, x| *x = 0.0_f32);
 
     loop {
