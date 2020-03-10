@@ -10,19 +10,19 @@ pub mod algorithms;
 fn main() {
     let mut stopwatch = stopwatch::Stopwatch::new();
 
-    let (S, A, T, P, R) = line_world::init(100);
-    let Pi = policies::create_random_uniform_policy(S.len(), A.len());
-    let V = algorithms::iterative_policy_evaluation(&S, &A, &T, &P, &R, &Pi, None, None, None);
+    let lw = line_world::init(100);
+    let Pi = policies::create_random_uniform_policy(lw.S.len(), lw.A.len());
+    let V = algorithms::iterative_policy_evaluation(&lw.S, &lw.A, &lw.T, &lw.P, &lw.R, &Pi, None, None, None);
     println!("Random uniform:");
     dbg!(V);
 
     println!();
 
-    let (S, A, T, P, R) = line_world::init(100);
-    let mut Pi = ndarray::Array2::zeros((S.len(), A.len()));
-    utils::apply_for_indices_2(&mut Pi, (&S, &ndarray::arr1(&[1])), |(_a, _b), x| *x = 1.0);
+    let lw = line_world::init(100);
+    let mut Pi = ndarray::Array2::zeros((lw.S.len(), lw.A.len()));
+    utils::apply_for_indices_2(&mut Pi, (&lw.S, &ndarray::arr1(&[1])), |(_a, _b), x| *x = 1.0);
     stopwatch.start();
-    let V = algorithms::iterative_policy_evaluation(&S, &A, &T, &P, &R, &Pi, None, None, None);
+    let V = algorithms::iterative_policy_evaluation(&lw.S, &lw.A, &lw.T, &lw.P, &lw.R, &Pi, None, None, None);
     stopwatch.stop();
     println!("Stratégie tout à droite");
     dbg!(&V);

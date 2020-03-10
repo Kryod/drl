@@ -28,6 +28,7 @@ dependencies = [
  "ndarray",
  "ndarray-rand",
  "ndarray-stats",
+ "rand",
 ]
 
 [[package]]

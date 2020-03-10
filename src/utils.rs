@@ -1,4 +1,5 @@
 use ndarray::{ Array1, Array2, Array3 };
+use rand::Rng;
 
 #[macro_export]
 macro_rules! inc_vec {
@@ -43,6 +44,21 @@ where F: Fn((usize, usize, usize), &mut T) {
             }
         }
     }
+}
+
+pub fn rand_pick(A: &Array1<usize>) -> usize {
+    let n = A.len();
+    let mut rng = rand::thread_rng();
+    A[rng.gen_range(0, n)]
+}
+
+pub fn find(A: &Array1<usize>, s: usize) -> bool {
+    for i in A.iter() {
+        if *i == s {
+            return true;
+        }
+    }
+    false
 }
 
 #[test]
