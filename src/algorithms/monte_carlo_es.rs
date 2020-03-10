@@ -1,8 +1,7 @@
-use ndarray::{ arr1, Array, Array1, Array2, Array3, Ix2 };
+use ndarray::{ s, arr1, Array, Array1, Array2, Array3, Ix2 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
-use ndarray::s;
 use ndarray_stats::QuantileExt;
-use crate::line_world::LineWorld;
+use crate::{ utils, policies, line_world::LineWorld };
 
 /* def monte_carlo_control_with_exploring_starts(
         S: np.ndarray,
@@ -72,7 +71,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
     assert!(gamma >= 0.0_f32 && gamma < 1.0_f32);
     assert!(nb_iter > 0_i32);
 
-    let mut Pi = crate::policies::create_random_uniform_policy(S.len(), A.len());
+    let mut Pi = policies::create_random_uniform_policy(S.len(), A.len());
     let mut V = Array::random((S.shape()[0], A.shape()[0]), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality::<Ix2>().unwrap();
     dbg!(&T);
     V.slice_mut(s![0..T[T.len()-1], ..]).map_inplace(|x| *x = 0.0);
@@ -83,12 +82,12 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
     let mut returns_count = Array2::<f32>::zeros((S.len(), A.len()));
 
     for _ in 0..nb_iter {
-        let s0 = crate::utils::rand_pick(&S);
+        let s0 = utils::rand_pick(&S);
 
-        if crate::utils::contains(&T, s0) {
+        if utils::contains(&T, s0) {
             continue;
         }
-        let a0 = crate::utils::rand_pick(&A);
+        let a0 = utils::rand_pick(&A);
         let (r, s) = step_func(s0, a0, &lw.P, &lw.R, &lw.S);
         let (mut s_list, mut a_list, mut r_list, _) = step_until_the_end_and_return_transitions_func(s, &Pi, &S, &A, &T,&lw.P,&lw.R);
         let mut G = 0.0;
@@ -99,7 +98,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
             G = r_list[t] + gamma * G;
             let st = s_list[t];
             let at = a_list[t];
-            if crate::utils::contains(&arr1(&s_list[0..t]), s_list[t]) && crate::utils::contains(&arr1(&a_list[0..t]), at) {
+            if utils::contains(&arr1(&s_list[0..t]), s_list[t]) && utils::contains(&arr1(&a_list[0..t]), at) {
                 continue
             }
             returns_sum[(st, at)] += G;
