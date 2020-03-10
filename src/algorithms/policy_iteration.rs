@@ -17,9 +17,6 @@ pub fn policy_iteration(
     let theta = theta.unwrap_or(0.000_001_f32);
 
     let mut V = Array::random(S.shape(), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality().unwrap();
-    V[1] = 0.38;
-    V[2] = 0.73;
-    V[3] = 0.25;
     utils::apply_for_indices(&mut V, &T, |_idx, x| *x = 0.0);
     let mut Pi = policies::create_random_uniform_policy(S.len(), A.len());
 
