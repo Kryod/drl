@@ -46,13 +46,15 @@ where F: Fn((usize, usize, usize), &mut T) {
     }
 }
 
-pub fn rand_pick(A: &Array1<usize>) -> usize {
+pub fn rand_pick<T>(A: &Array1<T>) -> T
+where T: Copy {
     let n = A.len();
     let mut rng = rand::thread_rng();
     A[rng.gen_range(0, n)]
 }
 
-pub fn find(A: &Array1<usize>, s: usize) -> bool {
+pub fn contains<T>(A: &Array1<T>, s: T) -> bool
+where T: PartialEq {
     for i in A.iter() {
         if *i == s {
             return true;

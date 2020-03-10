@@ -107,7 +107,7 @@ pub fn step_until_the_end_of_episode_and_return_transitions(s: usize,
     let mut s_p_list = vec![];
     let mut rng = thread_rng();
     let mut s = s;
-    while !crate::utils::find(&T, s) && s_list.len() < S.len() * 10 {
+    while !crate::utils::contains(&T, s) && s_list.len() < S.len() * 10 {
         let dist = WeightedIndex::new(&Pi.slice(s![s, ..])).unwrap();
         let a = A[dist.sample(&mut rng)];
         let (r, s_p) = step(s, a, P, R, S);

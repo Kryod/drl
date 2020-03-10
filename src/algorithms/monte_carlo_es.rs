@@ -82,7 +82,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
     for _ in 0..nb_iter {
         let s0 = crate::utils::rand_pick(&S);
 
-        if crate::utils::find(&T, s0) {
+        if crate::utils::contains(&T, s0) {
             continue;
         }
         let a0 = crate::utils::rand_pick(&A);
@@ -96,7 +96,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
             G = r_list[t] + gamma * G;
             let st = s_list[t];
             let at = a_list[t];
-            if crate::utils::find(&arr1(&s_list[0..t]), st) && crate::utils::find(&arr1(&a_list[0..t]), at) {
+            if crate::utils::contains(&arr1(&s_list[0..t]), st) && crate::utils::contains(&arr1(&a_list[0..t]), at) {
                 continue
             }
             returns_sum[(st, at)] += G;
