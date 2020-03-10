@@ -74,7 +74,9 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
 
     let mut Pi = crate::policies::create_random_uniform_policy(S.len(), A.len());
     let mut V = Array::random((S.shape()[0], A.shape()[0]), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality::<Ix2>().unwrap();
-    V.slice_mut(s![..T[T.len()-1], ..]).map(|_x| 0.0);
+    dbg!(&T);
+    V.slice_mut(s![0..T[T.len()-1], ..]).map_inplace(|x| *x = 0.0);
+    dbg!(&V);
 
 
     let mut returns_sum = Array2::<f32>::zeros((S.len(), A.len()));
@@ -88,7 +90,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
         }
         let a0 = crate::utils::rand_pick(&A);
         let (r, s) = step_func(s0, a0, &lw.P, &lw.R, &lw.S);
-        let (mut s_list, mut a_list, mut r_list, _) = step_until_the_end_and_return_transitions_func(s, &Pi, &lw.S,&lw.A,&lw.T,&lw.P,&lw.R);
+        let (mut s_list, mut a_list, mut r_list, _) = step_until_the_end_and_return_transitions_func(s, &Pi, &S, &A, &T,&lw.P,&lw.R);
         let mut G = 0.0;
         s_list.insert(0, s0);
         a_list.insert(0, a0);
@@ -97,13 +99,13 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
             G = r_list[t] + gamma * G;
             let st = s_list[t];
             let at = a_list[t];
-            if crate::utils::contains(&arr1(&s_list[0..t]), st) && crate::utils::contains(&arr1(&a_list[0..t]), at) {
+            if crate::utils::contains(&arr1(&s_list[0..t]), s_list[t]) && crate::utils::contains(&arr1(&a_list[0..t]), at) {
                 continue
             }
             returns_sum[(st, at)] += G;
             returns_count[(st, at)] += 1.0;
             V[(st, at)] = returns_sum[(st, at)] / returns_count[(st, at)];
-            Pi.slice_mut(s![st, ..]).map(|_x| 0.0);
+            Pi.slice_mut(s![st, ..]).map_inplace(|x| *x = 0.0);
             let arg = V.slice(s![st, ..]).argmax().unwrap();
             Pi[(st, arg)] = 1.0;
         }

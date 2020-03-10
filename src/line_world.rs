@@ -87,7 +87,7 @@ pub fn step(s: usize, a: usize, P: &Array3<f32>, R: &Array3<f32>, S: &Array1<usi
     let dist = WeightedIndex::new(P.slice(s![s, a, ..])).unwrap();
     let mut rng = thread_rng();
     let s_p = S[dist.sample(&mut rng)];
-    let r = R[[s, a, s_p]];
+    let r = R[(s, a, s_p)];
     (r, s_p)
 }
 
