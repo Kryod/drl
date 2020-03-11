@@ -3,12 +3,13 @@ use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 use ndarray_stats::QuantileExt;
 use crate::{ utils, policies, grid_world::World, inc_vec };
 
-pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
+pub fn monte_carlo_control_on_policy<F, Fi>(
         lw: & impl World,
         step_func: F,
         step_until_the_end_and_return_transitions_func: Fi,
         gamma: Option<f32>,
         nb_iter: Option<i32>,
+        epsilon: Option<f32>
     ) -> (Array2<f32>, Array2<f32>)
     where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize), 
         Fi: Fn(usize,
@@ -25,6 +26,7 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
 
     let gamma = gamma.unwrap_or(0.99_f32);
     let nb_iter = nb_iter.unwrap_or(1_000_i32);
+    let epsilon = epsilon.unwrap_or(0.1_f32);
 
     assert!(gamma >= 0.0_f32 && gamma < 1.0_f32);
     assert!(nb_iter > 0_i32);
@@ -61,9 +63,14 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
             returns_sum[(st, at)] += G;
             returns_count[(st, at)] += 1.0;
             V[(st, at)] = returns_sum[(st, at)] / returns_count[(st, at)];
-            Pi.slice_mut(s![st, ..]).map_inplace(|x| *x = 0.0);
-            let arg = V.slice(s![st, ..]).argmax().unwrap();
-            Pi[(st, arg)] = 1.0;
+            let index = V.slice(s![st, ..]).argmax().unwrap();
+            for a in 0..V.shape()[1] {
+                if a == index {
+                    Pi[(st, a)] = 1.0 - epsilon + (epsilon / (V.slice(s![st, ..]).sum().abs()) as f32)
+                } else {
+                    Pi[(st, a)] = epsilon / (V.slice(s![st, ..]).sum().abs()) as f32;
+                }
+            }
         }
     }
 
