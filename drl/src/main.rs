@@ -111,7 +111,7 @@ fn main() {
     println!("Action value optimale:\r\n{}", Q);
     println!("Policy optimale:\r\n {}", Pi);*/
     
-    println!("---------------MONTE CARLO OFF-POLICY------------------");
+   /* println!("---------------MONTE CARLO OFF-POLICY------------------");
     let lw = line_world::init(5);
     let (Q, Pi) = algorithms::monte_carlo_control_off_policy(&lw, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, None, Some(5000));
     println!("Action value optimale:\r\n{}", Q);
@@ -120,6 +120,17 @@ fn main() {
     let lw = grid_world::init(2, 2);
     let (Q, Pi) = algorithms::monte_carlo_control_off_policy(&lw, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, None, Some(5000));
     println!("Action value optimale:\r\n{}", Q);
-    println!("Policy optimale:\r\n {}", Pi);
+    println!("Policy optimale:\r\n {}", Pi);*/
+
+    println!("---------------SARSA------------------");
+    let lw = line_world::init(5);
+    let Q = algorithms::sarsa(&lw, line_world::step, None, Some(5000), None, None);
+    println!("Action value optimale:\r\n{}", Q);
+    //println!("Policy optimale:\r\n {}", Pi);
+
+    let lw = grid_world::init(2, 2);
+    let Q = algorithms::sarsa(&lw, line_world::step, None, Some(5000), None, None);
+    println!("Action value optimale:\r\n{}", Q);
+    //println!("Policy optimale:\r\n {}", Pi);
     
 }
