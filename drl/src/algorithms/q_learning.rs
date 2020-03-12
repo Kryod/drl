@@ -1,8 +1,9 @@
-use ndarray::{ arr1, Array, Array1, Array2, Array3, Ix2 };
+use ndarray::{ s, arr1, Array, Array1, Array2, Array3, Ix2 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
+use ndarray_stats::QuantileExt;
 use crate::{ utils, grid_world::World, inc_vec };
 
-pub fn sarsa<F>(
+pub fn q_learning<F>(
         lw: & impl World,
         step_func: F,
         gamma: Option<f32>,
@@ -32,18 +33,15 @@ pub fn sarsa<F>(
     for _ in 0..nb_iter {
         //let mut s0 = utils::rand_pick(&S);
         let mut s0 = S[lw.get_start_state()];
-        let mut a0 = utils::rand_pick_greedy(&A, epsilon, &V, s0);
+        //let mut a0 = utils::rand_pick_greedy(&A, epsilon, &V, s0);
         let mut t = 0;
-        if utils::contains(&T, s0) {
-            continue;
-        }
         while t < max_step {
+            let a0 = utils::rand_pick_greedy(&A, epsilon, &V, s0);
             let (r, s_prime) = step_func(s0, a0, &P, &R, &S);
-            let a_prime = utils::rand_pick_greedy(&A, epsilon, &V, s_prime);
-            V[(s0, a0)] = V[(s0, a0)] + alpha * (r + gamma * V[(s_prime, a_prime)] - V[(s0, a0)]);
+            let index = V.slice(s![s_prime, ..]).argmax().unwrap();
+            V[(s0, a0)] = V[(s0, a0)] + alpha * (r + gamma * V[(s_prime, index)] - V[(s0, a0)]);
             
             s0 = s_prime;
-            a0 = a_prime;
             t+=1;
             if utils::contains(T, s0){
                 break;

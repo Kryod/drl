@@ -6,6 +6,8 @@ pub trait World {
     fn new(S: Array1<usize>, A: Array1<usize>, T: Array1<usize>, P: Array3<f32>, R: Array3<f32>) -> Self;
 
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>);
+
+    fn get_start_state(&self) -> usize;
 }
 
 
@@ -30,6 +32,10 @@ impl World for GridWorld {
 
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>) {
         (&self.S, &self.A, &self.T, &self.P, &self.R)
+    }
+
+    fn get_start_state(&self) -> usize {
+        0
     }
 }
 

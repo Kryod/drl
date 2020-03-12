@@ -1,5 +1,8 @@
-use ndarray::{ Array1, Array2, Array3 };
+use ndarray::{ s, Array1, Array2, Array3 };
 use rand::Rng;
+use ndarray_stats::QuantileExt;
+use rand::distributions::Distribution;
+use rand::distributions::Uniform;
 
 #[macro_export]
 macro_rules! inc_vec {
@@ -52,6 +55,18 @@ where T: Copy {
     let mut rng = rand::thread_rng();
     A[rng.gen_range(0, n)]
 }
+
+pub fn rand_pick_greedy(A: &Array1<usize>, epsilon: f32, V: &Array2<f32>, s: usize) -> usize{
+    let between = Uniform::new(0.0,1.0);
+    let mut rng = rand::thread_rng();
+    if between.sample(&mut rng) < epsilon {
+        rand_pick(A)
+    }
+    else {
+        V.slice(s![s, ..]).argmax().unwrap()
+    }
+}
+
 
 pub fn contains<T>(A: &Array1<T>, s: T) -> bool
 where T: PartialEq {

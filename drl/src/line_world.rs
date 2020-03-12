@@ -26,6 +26,10 @@ impl World for LineWorld {
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>) {
         (&self.S, &self.A, &self.T, &self.P, &self.R)
     }
+
+    fn get_start_state(&self) -> usize {
+        2
+    }
 }
 
 pub fn init(num_states: usize) -> LineWorld {
@@ -45,12 +49,11 @@ pub fn init(num_states: usize) -> LineWorld {
         P[(*s, 0, *s-1)] = 1.0;
         P[(*s, 1, *s+1)] = 1.0;
     }
-    R[(1, 0, 0)] = -1.0;
+    R[(1, 0, 0)] = -5.0;
     R[(num_states - 2, 1, num_states - 1)] = 1.0;
 
     LineWorld::new(S, A, T, P, R)
 }
-
 
 pub fn step(s: usize, a: usize, P: &Array3<f32>, R: &Array3<f32>, S: &Array1<usize>) -> (f32, usize){
     let dist = WeightedIndex::new(P.slice(s![s, a, ..])).unwrap();
