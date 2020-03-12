@@ -9,7 +9,7 @@ pub fn monte_carlo_control_off_policy<F, Fi>(
         step_until_the_end_and_return_transitions_func: Fi,
         gamma: Option<f32>,
         nb_iter: Option<i32>
-    ) -> (Array2<f32>, Array1<f32>)
+    ) -> (Array2<f32>, Array1<usize>)
     where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize), 
         Fi: Fn(usize,
             &Array2<f32>,
@@ -29,7 +29,7 @@ pub fn monte_carlo_control_off_policy<F, Fi>(
     assert!(gamma >= 0.0_f32 && gamma < 1.0_f32);
     assert!(nb_iter > 0_i32);
 
-    let mut Pi = Array1::<f32>::zeros(S.shape()[0]);
+    let mut Pi = Array1::<usize>::zeros(S.shape()[0]);
     let mut V = Array::random((S.shape()[0], A.shape()[0]), Uniform::new(0.0_f32, 1.0_f32)).into_dimensionality::<Ix2>().unwrap();
     let mut C = Array2::<f32>::zeros((S.shape()[0], A.shape()[0]));
     let shape = V.shape()[1];
@@ -37,7 +37,7 @@ pub fn monte_carlo_control_off_policy<F, Fi>(
 
     for i in 0 .. V.shape()[0] {
         let argmax = V.slice(s![i, ..]).argmax().unwrap();
-        Pi[i] = V[(i, argmax)];
+        Pi[i] = argmax;
     }
 
     for _ in 0..nb_iter {
@@ -62,8 +62,8 @@ pub fn monte_carlo_control_off_policy<F, Fi>(
             C[(st, at)] = C[(st, at)] + W;
             V[(st, at)] = V[(st, at)] + (W / C[(st, at)]) * (G - V[(st, at)]);
             let argmax = V.slice(s![st, ..]).argmax().unwrap();
-            Pi[(st)] = V[(st, argmax)];
-            if at as f32 != Pi[st] {
+            Pi[(st)] = argmax;
+            if at != Pi[st] {
                 break;
             }
             W = W * (1.0 / B[(st, at)]);
