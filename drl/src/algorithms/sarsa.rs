@@ -9,7 +9,7 @@ pub fn sarsa<F>(
         nb_iter: Option<i32>,
         max_step: Option<i32>,
         alpha: Option<f32>
-    ) -> (Array2<f32>)
+    ) -> Array2<f32>
     where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize),
     {
 
@@ -18,7 +18,7 @@ pub fn sarsa<F>(
     let gamma = gamma.unwrap_or(0.99_f32);
     let nb_iter = nb_iter.unwrap_or(1_000_i32);
     let max_step = max_step.unwrap_or(100_i32);
-    let alpha = alpha.unwrap_or(0.85_f32);
+    let alpha = alpha.unwrap_or(0.1_f32);
 
     assert!(gamma >= 0.0_f32 && gamma < 1.0_f32);
     assert!(nb_iter > 0_i32);
@@ -31,18 +31,20 @@ pub fn sarsa<F>(
         let mut s0 = utils::rand_pick(&S);
         let mut a0 = utils::rand_pick(&A);
         let mut t = 0;
+        if utils::contains(&T, s0) {
+            continue;
+        }
         while t < max_step {
-            if utils::contains(T, s0){
-                break;
-            }
             let (r, s_prime) = step_func(s0, a0, &P, &R, &S);
             let a_prime = utils::rand_pick(&A);
             V[(s0, a0)] = V[(s0, a0)] + alpha * (r + gamma * V[(s_prime, a_prime)] - V[(s0, a0)]);
             
             s0 = s_prime;
             a0 = a_prime;
-
             t+=1;
+            if utils::contains(T, s0){
+                break;
+            }
         }
         
     }
