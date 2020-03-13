@@ -103,31 +103,31 @@ impl Drl {
                 self.Pi = Some(Pi);
             },
             Algorithm::MonteCarloExploringStarts => {
-                let (Q, Pi) = algorithms::monte_carlo_control_with_exploring_starts(w, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, self.gamma, self.nb_iter);
+                let (Q, Pi) = algorithms::monte_carlo_control_with_exploring_starts(w, self.gamma, self.nb_iter);
                 self.Q = Some(Q);
                 self.Pi = Some(Pi);
             },
             Algorithm::MonteCarloOnPolicyFirstVisit => {
-                let (Q, Pi) = algorithms::monte_carlo_control_on_policy(w, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, self.gamma, self.nb_iter, self.epsilon);
+                let (Q, Pi) = algorithms::monte_carlo_control_on_policy(w, self.gamma, self.nb_iter, self.epsilon);
                 self.Q = Some(Q);
                 self.Pi = Some(Pi);
             },
             Algorithm::MonteCarloOffPolicy => {
-                let (Q, _Pi) = algorithms::monte_carlo_control_off_policy(w, line_world::step, line_world::step_until_the_end_of_episode_and_return_transitions, self.gamma, self.nb_iter);
+                let (Q, _Pi) = algorithms::monte_carlo_control_off_policy(w, self.gamma, self.nb_iter);
                 self.Q = Some(Q);
                 //self.Pi = Some(Pi);
             },
             Algorithm::Sarsa => {
-                self.Q = Some(algorithms::sarsa(w, line_world::step, self.gamma, self.nb_iter, self.max_step, self.epsilon, self.alpha));
+                self.Q = Some(algorithms::sarsa(w, self.gamma, self.nb_iter, self.max_step, self.epsilon, self.alpha));
             },
             Algorithm::QLearning => {
-
+                self.Q = Some(algorithms::q_learning(w, self.gamma, self.nb_iter, self.max_step, self.epsilon, self.alpha));
             },
             Algorithm::ExpectedSarsa => {
 
             },
             Algorithm::DynaQ => {
-                self.Q = Some(algorithms::dyna_q(w, line_world::step, self.gamma, self.nb_iter, self.n, self.epsilon, self.alpha));
+                self.Q = Some(algorithms::dyna_q(w, self.gamma, self.nb_iter, self.n, self.epsilon, self.alpha));
             },
             Algorithm::EpisodicSemiGradiantSarsa => {
 

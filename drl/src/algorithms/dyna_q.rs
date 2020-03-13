@@ -1,23 +1,21 @@
-use ndarray::{ s, arr1, Array, Array1, Array2, Array3, Ix2 };
+use ndarray::{ s, arr1, Array, Array2, Ix2 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 use ndarray_stats::QuantileExt;
 //use rand::seq::SliceRandom;
 //use rand::Rng;
 use crate::{ utils, grid_world::World, inc_vec };
 
-pub fn dyna_q<F>(
-        lw: & impl World,
-        step_func: F,
+pub fn dyna_q(
+        w: &impl World,
         gamma: Option<f32>,
         nb_iter: Option<i32>,
         n: Option<i32>,
         epsilon: Option<f32>,
         alpha: Option<f32>
     ) -> Array2<f32>
-    where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize),
     {
 
-    let (S, A, T, P, R) = lw.get_all();
+    let (S, A, T, P, R) = w.get_all();
 
     let gamma = gamma.unwrap_or(0.99_f32);
     let nb_iter = nb_iter.unwrap_or(1_000_i32);
@@ -39,18 +37,18 @@ pub fn dyna_q<F>(
     let mut prev_state = vec![];
     let mut prev_action = vec![];
 
-    let mut s0 = S[lw.get_start_state()];
+    let mut s0 = S[w.get_start_state()];
 
     for _ in 0..nb_iter {
         let a0 = utils::rand_pick_greedy(&A, epsilon, &V, s0);
         
 
         if utils::contains(&T, s0) {
-            s0 = S[lw.get_start_state()];
+            s0 = S[w.get_start_state()];
             continue;
         }
 
-        let (r, s_prime) = step_func(s0, a0, &P, &R, &S);
+        let (r, s_prime) = w.step(s0, a0, &P, &R, &S);
         let argmax = V.slice(s![s_prime, ..]).argmax().unwrap();
         V[(s0, a0)] = V[(s0, a0)] + alpha * (r + gamma * V[(s_prime, argmax)] - V[(s0, a0)]);
         Model_r[(s0,a0)] = r;

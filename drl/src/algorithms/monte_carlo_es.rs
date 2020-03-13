@@ -1,28 +1,15 @@
-use ndarray::{ s, arr1, Array, Array1, Array2, Array3, Ix2 };
+use ndarray::{ s, arr1, Array, Array2, Ix2 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 use ndarray_stats::QuantileExt;
 use crate::{ utils, policies, grid_world::World, inc_vec };
 
-pub fn monte_carlo_control_with_exploring_starts<F, Fi, W>(
-        lw: &W,
-        step_func: F,
-        step_until_the_end_and_return_transitions_func: Fi,
+pub fn monte_carlo_control_with_exploring_starts(
+        w: &impl World,
         gamma: Option<f32>,
         nb_iter: Option<i32>,
-    ) -> (Array2<f32>, Array2<f32>)
-    where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize), 
-        W: World,
-        Fi: Fn(usize,
-            &Array2<f32>,
-            &Array1<usize>,
-            &Array1<usize>,
-            &Array1<usize>,
-            &Array3<f32>,
-            &Array3<f32> ) -> (Vec<usize>, Vec<usize>, Vec<f32>, Vec<usize>)
-     
-    {
+    ) -> (Array2<f32>, Array2<f32>) {
 
-    let (S, A, T, P, R) = lw.get_all();
+    let (S, A, T, P, R) = w.get_all();
 
     let gamma = gamma.unwrap_or(0.99_f32);
     let nb_iter = nb_iter.unwrap_or(1_000_i32);
@@ -46,8 +33,8 @@ pub fn monte_carlo_control_with_exploring_starts<F, Fi, W>(
             continue;
         }
         let a0 = utils::rand_pick(&A);
-        let (r, s) = step_func(s0, a0, &P, &R, &S);
-        let (mut s_list, mut a_list, mut r_list, _) = step_until_the_end_and_return_transitions_func(s, &Pi, &S, &A, &T,&P,&R);
+        let (r, s) = w.step(s0, a0, &P, &R, &S);
+        let (mut s_list, mut a_list, mut r_list, _) = w.step_until_the_end_of_episode_and_return_transitions(s, &Pi, &S, &A, &T, &P, &R);
         let mut G = 0.0;
         s_list.insert(0, s0);
         a_list.insert(0, a0);

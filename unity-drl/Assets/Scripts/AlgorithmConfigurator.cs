@@ -24,6 +24,7 @@ public abstract class AlgorithmConfigurator : MonoBehaviour
             float v = *(V + i);
             UI.GridCell cell = UI.GridManager.Instance.Get(i);
             cell.text.text = v.ToString("0.0000");
+            cell.text.fontSize = cell.text.rectTransform.rect.width * 0.2f;
         }
     }
 }
