@@ -2679,12 +2679,12 @@ MonoBehaviour:
   algorithmTypeDropdown: {fileID: 599407150}
   algorithmContainer: {fileID: 1431195899}
   algorithmSettings:
-  - {fileID: 8902278308868982313, guid: e31578e1dae97d64792253810e7b98b7, type: 3}
-  - {fileID: 8902278308868982313, guid: 7f27b416d11737e45adbe9d8e26f2aac, type: 3}
+  - {fileID: 5043114294319566662, guid: dbe74ee23398c76479a4a71d8b39c48b, type: 3}
+  - {fileID: 5043114294319566662, guid: 0a635b1caab32e74d93e179b3161473d, type: 3}
   - {fileID: 8902278308868982313, guid: c5552dc8912aa8c4d9ade0bab301fc18, type: 3}
   - {fileID: 8902278308868982313, guid: 68547dc7c1fc10741b0438d6f47cc16b, type: 3}
-  - {fileID: 8902278308868982313, guid: 8f60534bba9d91248aa2da2a56ede593, type: 3}
-  - {fileID: 8902278308868982313, guid: 1e1bc05042743d64dae78b778abf2176, type: 3}
+  - {fileID: 5043114294319566662, guid: 985206fdc1c60764c9054ae6957b3802, type: 3}
+  - {fileID: 5043114294319566662, guid: af04e95e5aacbe14f96e28ffbea5fe08, type: 3}
   - {fileID: 8902278308868982313, guid: dddb7c9ac8fee2b4aa7c8f4504b6b16f, type: 3}
   - {fileID: 8902278308868982313, guid: 90588b04af0cffb428bf0259d01727f3, type: 3}
   - {fileID: 8902278308868982313, guid: 7e81c76f70838c846b532023d9583022, type: 3}

@@ -1,6 +1,19 @@
+using UnityEngine;
+using UnityEngine.UI;
+
 namespace Algorithms
 {
     public class MonteCarloOffPolicy : AlgorithmConfigurator
     {
+        [SerializeField] private Slider gamma;
+        [SerializeField] private Slider nbIter;
+
+        public override void Run()
+        {
+            NativePlugins.Drl.Instance.SetGamma(this.gamma.value);
+            NativePlugins.Drl.Instance.SetNbIter((int)this.nbIter.value);
+            this.RunAlgorithm();
+            this.DisplayQ();
+        }
     }
 }

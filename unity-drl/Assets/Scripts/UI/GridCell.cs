@@ -8,5 +8,7 @@ namespace UI
     {
         public Image image;
         public TMP_Text text;
+        public Image arrow;
+        public RectTransform arrowContainer;
     }
 }

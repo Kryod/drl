@@ -186,10 +186,6 @@ impl Drl {
     }
 
     #[no_mangle]
-    pub fn get_q() {
-    }
-
-    #[no_mangle]
     pub unsafe fn get_v(&self, len: *mut usize) -> *const f32 {
         match &self.V {
             Some(V) => {
@@ -204,6 +200,32 @@ impl Drl {
     }
 
     #[no_mangle]
-    pub fn get_pi() {
+    pub unsafe fn get_q(&self, len: *mut usize, n_actions: *mut usize) -> *const f32 {
+        match &self.Q {
+            Some(Q) => {
+                *len = Q.len();
+                *n_actions = Q.shape()[1];
+                Q.as_ptr()
+            }
+            None => {
+                *len = 0;
+                std::ptr::null()
+            },
+        }
+    }
+
+    #[no_mangle]
+    pub unsafe fn get_pi(&self, len: *mut usize, n_actions: *mut usize) -> *const f32 {
+        match &self.Pi {
+            Some(Pi) => {
+                *len = Pi.len();
+                *n_actions = Pi.shape()[1];
+                Pi.as_ptr()
+            }
+            None => {
+                *len = 0;
+                std::ptr::null()
+            },
+        }
     }
 }

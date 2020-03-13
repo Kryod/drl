@@ -8,8 +8,8 @@ namespace UI
         [SerializeField] private GridLayoutGroup gridLayout;
         [SerializeField] private GridCell cellPrefab;
         private GridCell[][] cells;
-        private int cols;
-        private int rows;
+        public int cols { get; private set; }
+        public int rows { get; private set; }
 
         public void CreateGrid(int cols, int rows)
         {

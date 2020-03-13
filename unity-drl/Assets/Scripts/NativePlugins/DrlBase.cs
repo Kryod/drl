@@ -58,14 +58,14 @@ namespace NativePlugins
         [DllImport(DrlBase.DynamicLibraryName, EntryPoint = "set_n", CallingConvention = CallingConvention.Cdecl)]
         private static extern void _SetN(IntPtr handle, int n);
 
-        [DllImport(DrlBase.DynamicLibraryName, EntryPoint = "get_q", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void _GetQ();
-
         [DllImport(DrlBase.DynamicLibraryName, EntryPoint = "get_v", CallingConvention = CallingConvention.Cdecl)]
         private static extern float* _GetV(IntPtr handle, UIntPtr* len);
 
+        [DllImport(DrlBase.DynamicLibraryName, EntryPoint = "get_q", CallingConvention = CallingConvention.Cdecl)]
+        private static extern float* _GetQ(IntPtr handle, UIntPtr* len, UIntPtr* nActions);
+
         [DllImport(DrlBase.DynamicLibraryName, EntryPoint = "get_pi", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void _GetPi();
+        private static extern float* _GetPi(IntPtr handle, UIntPtr* len, UIntPtr* nActions);
 #else
         private delegate IntPtr DllInitialize();
         private delegate void DllDispose(IntPtr handle);
@@ -79,9 +79,9 @@ namespace NativePlugins
         private delegate void DllSetNbIter(IntPtr handle, int nbIter);
         private delegate void DllSetMaxStep(IntPtr handle, int maxStep);
         private delegate void DllSetN(IntPtr handle, int n);
-        private delegate void DllGetQ();
         private delegate float* DllGetV(IntPtr handle, UIntPtr* len);
-        private delegate void DllGetPi();
+        private delegate float* DllGetQ(IntPtr handle, UIntPtr* len, UIntPtr* nActions);
+        private delegate float* DllGetPi(IntPtr handle, UIntPtr* len, UIntPtr* nActions);
 #endif
 
         public DrlBase()
@@ -208,16 +208,6 @@ namespace NativePlugins
 #endif
         }
 
-        public void GetQ()
-        {
-            this.CheckHandle();
-#if !UNITY_EDITOR
-            _GetQ();
-#else
-            NativePluginLoader.GetDelegate<DllGetQ>(this.DllHandle, "get_q")();
-#endif
-        }
-
         public float* GetV(UIntPtr* len)
         {
             this.CheckHandle();
@@ -228,13 +218,23 @@ namespace NativePlugins
 #endif
         }
 
-        public void GetPi()
+        public float* GetQ(UIntPtr* len, UIntPtr* nActions)
         {
             this.CheckHandle();
 #if !UNITY_EDITOR
-            _GetPi();
+            return _GetQ(this.Handle, len, nActions);
 #else
-            NativePluginLoader.GetDelegate<DllGetPi>(this.DllHandle, "get_pi")();
+            return NativePluginLoader.GetDelegate<DllGetQ>(this.DllHandle, "get_q")(this.Handle, len, nActions);
+#endif
+        }
+
+        public float* GetPi(UIntPtr* len, UIntPtr* nActions)
+        {
+            this.CheckHandle();
+#if !UNITY_EDITOR
+            return _GetPi(this.Handle, len, nActions);
+#else
+            return NativePluginLoader.GetDelegate<DllGetPi>(this.DllHandle, "get_pi")(this.Handle, len, nActions);
 #endif
         }
 
