@@ -30,7 +30,7 @@ pub fn monte_carlo_control_off_policy(
     }
 
     for _ in 0..nb_iter {
-        let s0 = utils::rand_pick(&S);
+        let s0 = S[w.get_start_state()];
 
         let B = policies::create_random_uniform_policy(S.len(), A.len());
         if utils::contains(&T, s0) {

@@ -2,7 +2,7 @@ use ndarray::{ s, arr1, Array, Array2, Ix2 };
 use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 use ndarray_stats::QuantileExt;
 //use rand::seq::SliceRandom;
-//use rand::Rng;
+use rand::Rng;
 use crate::{ utils, grid_world::World, inc_vec };
 
 pub fn dyna_q(
@@ -53,26 +53,29 @@ pub fn dyna_q(
         V[(s0, a0)] = V[(s0, a0)] + alpha * (r + gamma * V[(s_prime, argmax)] - V[(s0, a0)]);
         Model_r[(s0,a0)] = r;
         Model_s[(s0,a0)] = s_prime;
+
+        prev_state.push(s0);
+        prev_action.push(a0);
         let mut t = 0;
         while t < n {
-            /*if prev_state.len() == 0 {
+            if prev_state.len() == 0 {
                 break;
             }
             let mut rng = rand::thread_rng();
             let n = rng.gen_range(0, prev_state.len());
-            let s = prev_state[n];*/
+            let s = prev_state[n];
 
-            let s = utils::rand_pick(&S);
-            let a = utils::rand_pick(&A);
+            //let s = utils::rand_pick(&S);
+            //let a = utils::rand_pick(&A);
             if utils::contains(T, s){
                 break;
             }
             /*let s = match prev_state.choose(&mut rand::thread_rng()) {
                 Some(s) => *s,
                 None => break,
-            };
+            };*/
 
-            let a = prev_action[s];*/
+            let a = prev_action[n];
             //let a = *prev_action.choose(&mut rand::thread_rng()).unwrap();
             let s_prime = Model_s[(s,a)];
             let r = Model_r[(s,a)];
@@ -82,9 +85,6 @@ pub fn dyna_q(
 
             
         }
-
-        prev_state.push(s0);
-        prev_action.push(a0);
         s0 = s_prime;
         
     }

@@ -29,7 +29,7 @@ pub fn monte_carlo_control_on_policy(
     let mut returns_count = Array2::<f32>::zeros((S.len(), A.len()));
 
     for _ in 0..nb_iter {
-        let s0 = utils::rand_pick(&S);
+        let s0 = S[w.get_start_state()];
 
         if utils::contains(&T, s0) {
             continue;
