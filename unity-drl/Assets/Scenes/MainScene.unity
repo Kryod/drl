@@ -1465,21 +1465,21 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Q-Learning
       m_Image: {fileID: 0}
-    - m_Text: Expected SARSA
+    - m_Text: (X) Expected SARSA
       m_Image: {fileID: 0}
     - m_Text: Dyna-Q
       m_Image: {fileID: 0}
-    - m_Text: Episodic Semi-Gradiant SARSA
+    - m_Text: (X) Episodic Semi-Gradiant SARSA
       m_Image: {fileID: 0}
-    - m_Text: Deep Q Learning
+    - m_Text: (X) Deep Q Learning
       m_Image: {fileID: 0}
-    - m_Text: Reinforce
+    - m_Text: (X) Reinforce
       m_Image: {fileID: 0}
-    - m_Text: Reinforce With Baseline
+    - m_Text: (X) Reinforce With Baseline
       m_Image: {fileID: 0}
-    - m_Text: One-Step Actor Critic
+    - m_Text: (X) One-Step Actor Critic
       m_Image: {fileID: 0}
-    - m_Text: PPO A2C Style
+    - m_Text: (X) PPO A2C Style
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1990,8 +1990,6 @@ MonoBehaviour:
     - m_Text: Line World
       m_Image: {fileID: 0}
     - m_Text: Grid World
-      m_Image: {fileID: 0}
-    - m_Text: Tic Tac Toe
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2681,14 +2679,14 @@ MonoBehaviour:
   algorithmSettings:
   - {fileID: 5043114294319566662, guid: dbe74ee23398c76479a4a71d8b39c48b, type: 3}
   - {fileID: 5043114294319566662, guid: 0a635b1caab32e74d93e179b3161473d, type: 3}
-  - {fileID: 8902278308868982313, guid: c5552dc8912aa8c4d9ade0bab301fc18, type: 3}
-  - {fileID: 8902278308868982313, guid: 68547dc7c1fc10741b0438d6f47cc16b, type: 3}
+  - {fileID: 5043114294319566662, guid: 0d3a7a5b19378a349a22a49464c272c3, type: 3}
+  - {fileID: 5043114294319566662, guid: a5e0a150aedfd104d9dd2274b3128afc, type: 3}
   - {fileID: 5043114294319566662, guid: 985206fdc1c60764c9054ae6957b3802, type: 3}
   - {fileID: 5043114294319566662, guid: af04e95e5aacbe14f96e28ffbea5fe08, type: 3}
-  - {fileID: 8902278308868982313, guid: dddb7c9ac8fee2b4aa7c8f4504b6b16f, type: 3}
-  - {fileID: 8902278308868982313, guid: 90588b04af0cffb428bf0259d01727f3, type: 3}
+  - {fileID: 5043114294319566662, guid: 830b6ae985bd2a347befcc83c730e627, type: 3}
+  - {fileID: 5043114294319566662, guid: 565bb63cf453d3647b3562d71dbf47a1, type: 3}
   - {fileID: 8902278308868982313, guid: 7e81c76f70838c846b532023d9583022, type: 3}
-  - {fileID: 8902278308868982313, guid: a0df6f9297a07b944bdf55d1b7f07de1, type: 3}
+  - {fileID: 5043114294319566662, guid: 0931179084917a04d9ccb5c57b75801a, type: 3}
   - {fileID: 8902278308868982313, guid: ee991d61004898541a20fca59c9a38db, type: 3}
   - {fileID: 8902278308868982313, guid: 86e69c1b797a7d841a9351fe5a48bfbe, type: 3}
   - {fileID: 8902278308868982313, guid: d8be267b6e52b1d47846705873ac5474, type: 3}
