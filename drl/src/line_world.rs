@@ -13,16 +13,6 @@ pub struct LineWorld {
 }
 
 impl World for LineWorld {
-    fn new(S: Array1<usize>, A: Array1<usize>, T: Array1<usize>, P: Array3<f32>, R: Array3<f32>) -> Self {
-        Self {
-            S,
-            A,
-            T,
-            P,
-            R
-        }
-    }
-
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>) {
         (&self.S, &self.A, &self.T, &self.P, &self.R)
     }
@@ -52,7 +42,7 @@ pub fn init(num_states: usize) -> LineWorld {
     R[(1, 0, 0)] = -5.0;
     R[(num_states - 2, 1, num_states - 1)] = 1.0;
 
-    LineWorld::new(S, A, T, P, R)
+    LineWorld { S, A, T, P, R }
 }
 
 pub fn step(s: usize, a: usize, P: &Array3<f32>, R: &Array3<f32>, S: &Array1<usize>) -> (f32, usize){

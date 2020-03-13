@@ -3,13 +3,19 @@ use crate::inc_vec;
 use crate::utils;
 
 pub trait World {
-    fn new(S: Array1<usize>, A: Array1<usize>, T: Array1<usize>, P: Array3<f32>, R: Array3<f32>) -> Self;
-
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>);
-
     fn get_start_state(&self) -> usize;
 }
 
+impl<W: ?Sized> World for Box<W> where W: World {
+    fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>) {
+        (**self).get_all()
+    }
+
+    fn get_start_state(&self) -> usize {
+        (**self).get_start_state()
+    }
+}
 
 pub struct GridWorld {
     pub S: Array1<usize>,
@@ -20,16 +26,6 @@ pub struct GridWorld {
 }
 
 impl World for GridWorld {
-    fn new(S: Array1<usize>, A: Array1<usize>, T: Array1<usize>, P: Array3<f32>, R: Array3<f32>) -> Self {
-        Self {
-            S,
-            A,
-            T,
-            P,
-            R
-        }
-    }
-
     fn get_all(&self) -> (&Array1<usize>, &Array1<usize>, &Array1<usize>, &Array3<f32>, &Array3<f32>) {
         (&self.S, &self.A, &self.T, &self.P, &self.R)
     }
@@ -96,5 +92,5 @@ pub fn init(width: usize, height: usize) -> GridWorld {
         (&ndarray::arr1(&inc_vec![R_shape_0]), &ndarray::arr1(&inc_vec![R_shape_1]), &ndarray::arr1(&[num_states-1])), 
         |(_a, _b, _c), x| *x = 1.0);
 
-    GridWorld::new(S, A, T, P, R)
+    GridWorld { S, A, T, P, R }
 }

@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 
+pub mod tools;
 pub mod utils;
 pub mod policies;
 pub mod stopwatch;
@@ -8,6 +9,8 @@ pub mod grid_world;
 pub mod algorithms;
 
 fn main() {
+    tools::copy_to_unity::copy_to_unity();
+
     /*
     println!("---------------ITERATIVE POLICY EVALUATION------------------");
     let mut stopwatch = stopwatch::Stopwatch::new();

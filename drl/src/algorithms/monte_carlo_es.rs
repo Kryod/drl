@@ -3,14 +3,15 @@ use ndarray_rand::{ RandomExt, rand_distr::Uniform };
 use ndarray_stats::QuantileExt;
 use crate::{ utils, policies, grid_world::World, inc_vec };
 
-pub fn monte_carlo_control_with_exploring_starts<F, Fi>(
-        lw: & impl World,
+pub fn monte_carlo_control_with_exploring_starts<F, Fi, W>(
+        lw: &W,
         step_func: F,
         step_until_the_end_and_return_transitions_func: Fi,
         gamma: Option<f32>,
         nb_iter: Option<i32>,
     ) -> (Array2<f32>, Array2<f32>)
     where F: Fn(usize, usize, &Array3<f32>, &Array3<f32>, &Array1<usize>) -> (f32, usize), 
+        W: World,
         Fi: Fn(usize,
             &Array2<f32>,
             &Array1<usize>,
